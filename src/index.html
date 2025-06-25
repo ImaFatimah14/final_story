@@ -33,66 +33,68 @@
     }
     /* Sidebar */
     .sidebar {
+      background: #232323;
+      color: #fff;
+      width: 240px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      box-shadow: 2px 0 16px rgba(0,0,0,0.2);
+      padding: 0;
       position: fixed;
       top: 0;
       left: 0;
-      width: 220px;
       height: 100vh;
-      background: #7c5b5b;
-      color: #fff;
-      z-index: 1000;
       transform: translateX(-100%);
       transition: transform 0.3s;
-      box-shadow: 2px 0 16px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      padding-top: 2rem;
     }
     .sidebar.open {
       transform: translateX(0);
     }
-    .sidebar .sidebar-header {
-      font-size: 1.3rem;
-      font-weight: bold;
-      padding: 0 1.5rem 1.5rem 1.5rem;
+    .sidebar-header {
+      background: #7c5b5b;
+      color: #fff;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      padding: 1rem 1.5rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      color: #fff;
+      justify-content: space-between;
     }
-    .sidebar ul {
-      list-style: none;
-      padding: 0 1.5rem;
+    .sidebar-toggle {
+      font-size: 1.7rem;
+      color: #fff;
+      border: 2px dashed #fff;
+      background: none;
+      border-radius: 4px;
+      padding: 0.3rem 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar-menu {
+      background: #232323;
+      padding: 1.5rem 0 1.5rem 0;
       margin: 0;
+      list-style: none;
       flex: 1;
     }
-    .sidebar ul li {
+    .sidebar-menu li {
       margin-bottom: 1.2rem;
     }
-    .sidebar ul li a {
+    .sidebar-menu li a {
       color: #fff;
       text-decoration: none;
-      font-size: 1.1rem;
       display: flex;
       align-items: center;
       gap: 0.7rem;
+      font-size: 1.1rem;
       transition: color 0.2s;
     }
-    .sidebar ul li a:hover {
+    .sidebar-menu li a:hover {
       color: #ffdee0;
-    }
-    .sidebar-toggle {
-      font-size: 2rem;
-      background: none;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      margin: 0;
-      z-index: 1001;
-      position: absolute;
-      right: 1.5rem;
-      top: 1.2rem;
-      left: auto;
     }
     @media (min-width: 900px) {
       .sidebar, .sidebar-overlay, .sidebar-toggle { display: none !important; }
@@ -204,25 +206,26 @@
   </button> -->
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar" aria-label="Menu utama">
-    <div class="sidebar-header">
-      <i class="fas fa-book-open"></i> StoryApp
+    <div class="sidebar-header" style="background:#7c5b5b;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;">
+      <span style="display:flex;align-items:center;gap:0.5rem;">
+        <i class="fas fa-book-open"></i> <span style="font-weight:bold;font-size:1.3rem;">StoryApp</span>
+      </span>
+      <button id="sidebarToggle" class="sidebar-toggle" aria-label="Tutup sidebar" style="background:none;border:2px dashed #fff;padding:0.3rem 0.5rem;border-radius:4px;display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-bars"></i>
+      </button>
     </div>
-    <ul class="sidebar-menu">
-      <li><a href="#/home"><i class="fas fa-home"></i> Beranda</a></li>
-      <li><a href="#/tambah"><i class="fas fa-plus"></i> Tambah Cerita</a></li>
-      <li><a href="#/saved"><i class="fas fa-bookmark"></i> Tersimpan</a></li>
-      <li><a href="#/about"><i class="fas fa-info-circle"></i> Tentang</a></li>
-      <li id="menu-login-sidebar"><a href="#/login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-      <li id="menu-register-sidebar"><a href="#/register"><i class="fas fa-user-plus"></i> Register</a></li>
-      <li id="menu-logout-sidebar" style="display:none;"><a href="#" id="logout-link-sidebar"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-      <li><button id="pushNotifBtnSidebar" class="subscribe" style="width:100%;background:#6b4c4c;color:#fff;border:none;padding:0.5rem 1rem;border-radius:6px;display:flex;align-items:center;gap:0.5rem;cursor:pointer;"><i class="fas fa-bell"></i> Subscribe</button></li>
+    <ul class="sidebar-menu" style="background:#232323;padding:1.5rem 0 1.5rem 0;margin:0;list-style:none;">
+      <li style="margin-bottom:1.2rem;"><a href="#/home" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-home"></i> Beranda</a></li>
+      <li style="margin-bottom:1.2rem;"><a href="#/tambah" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-plus"></i> Tambah Cerita</a></li>
+      <li style="margin-bottom:1.2rem;"><a href="#/saved" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-bookmark"></i> Tersimpan</a></li>
+      <li style="margin-bottom:1.2rem;"><a href="#/about" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-info-circle"></i> Tentang</a></li>
+      <li id="menu-logout-sidebar" style="margin-bottom:1.2rem;"><a href="#" id="logout-link-sidebar" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
     </ul>
   </nav>
   <script>
-    // Sidebar logic
+    // Sidebar open/close logic
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
     function openSidebar() {
       sidebar.classList.add('open');
       document.body.classList.add('sidebar-open');
@@ -231,82 +234,23 @@
       sidebar.classList.remove('open');
       document.body.classList.remove('sidebar-open');
     }
-    sidebarToggle.addEventListener('click', openSidebar);
+    sidebarToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    });
+    // Close sidebar when clicking outside (overlay)
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
     sidebarOverlay.addEventListener('click', closeSidebar);
-    function attachSidebarMenuEvents() {
-      sidebar.querySelectorAll('a').forEach(link => {
-        link.onclick = function(e) {
-          const href = link.getAttribute('href');
-          if (href && href.startsWith('#')) {
-            window.location.hash = href;
-            e.preventDefault();
-          }
-          closeSidebar();
-        };
-      });
-    }
-    // Auth logic
-    function updateSidebarAuth() {
-      const isLoggedIn = !!localStorage.getItem('token');
-      document.getElementById('menu-login-sidebar').style.display = isLoggedIn ? 'none' : 'block';
-      document.getElementById('menu-register-sidebar').style.display = isLoggedIn ? 'none' : 'block';
-      document.getElementById('menu-logout-sidebar').style.display = isLoggedIn ? 'block' : 'none';
-      attachSidebarMenuEvents();
-    }
+    // Logout logic
     document.getElementById('logout-link-sidebar').addEventListener('click', function(e) {
       e.preventDefault();
       localStorage.removeItem('token');
       window.location.href = '#/login';
-      updateSidebarAuth();
     });
-    window.addEventListener('hashchange', updateSidebarAuth);
-    document.addEventListener('DOMContentLoaded', () => {
-      updateSidebarAuth();
-      attachSidebarMenuEvents();
-    });
-
-    // Push Notification logic untuk sidebar
-    function requestPushPermission() {
-      if ('Notification' in window) {
-        Notification.requestPermission().then(function(permission) {
-          if (permission === 'granted') {
-            alert('Notifikasi diizinkan!');
-            setSubscribed(true);
-          } else if (permission === 'denied') {
-            alert('Notifikasi diblokir.');
-            setSubscribed(false);
-          }
-        });
-      } else {
-        alert('Browser tidak mendukung notifikasi.');
-      }
-    }
-    function setSubscribed(isSubscribed) {
-      const btn = document.getElementById('pushNotifBtnSidebar');
-      if (!btn) return;
-      if (isSubscribed) {
-        btn.innerHTML = '<i class="fas fa-bell-slash"></i> Unsubscribe';
-        btn.setAttribute('data-subscribed', 'true');
-      } else {
-        btn.innerHTML = '<i class="fas fa-bell"></i> Subscribe';
-        btn.setAttribute('data-subscribed', 'false');
-      }
-    }
-    // Cek status awal (optional, default subscribe = false)
-    setSubscribed(false);
-    // Event listener subscribe/unsubscribe
-    const pushNotifBtnSidebar = document.getElementById('pushNotifBtnSidebar');
-    if (pushNotifBtnSidebar) {
-      pushNotifBtnSidebar.addEventListener('click', function(e) {
-        e.preventDefault();
-        const isSubscribed = pushNotifBtnSidebar.getAttribute('data-subscribed') === 'true';
-        if (isSubscribed) {
-          setSubscribed(false);
-        } else {
-          requestPushPermission();
-        }
-      });
-    }
   </script>
 </body>
 </html>
