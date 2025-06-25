@@ -19,6 +19,83 @@
   />
 
   <!-- External CSS -->
+  <style>
+    /* Sidebar overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 999;
+    }
+    .sidebar-open .sidebar-overlay {
+      display: block;
+    }
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 100vh;
+      background: #23243a;
+      color: #fff;
+      z-index: 1000;
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+      box-shadow: 2px 0 16px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      padding-top: 2rem;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .sidebar .sidebar-header {
+      font-size: 1.3rem;
+      font-weight: bold;
+      padding: 0 1.5rem 1.5rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0 1.5rem;
+      margin: 0;
+      flex: 1;
+    }
+    .sidebar ul li {
+      margin-bottom: 1.2rem;
+    }
+    .sidebar ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: color 0.2s;
+    }
+    .sidebar ul li a:hover {
+      color: #ffdee0;
+    }
+    .sidebar-toggle {
+      font-size: 2rem;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      margin: 1rem;
+      z-index: 1001;
+      position: fixed;
+      left: 0.5rem;
+      top: 1rem;
+    }
+    @media (min-width: 900px) {
+      .sidebar, .sidebar-overlay, .sidebar-toggle { display: none !important; }
+    }
+  </style>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
@@ -128,5 +205,52 @@
     document.addEventListener('visibilitychange', updateSidebarMenu);
   </script>
 
+  <div class="sidebar-overlay"></div>
+  <button class="sidebar-toggle" id="sidebarToggle" aria-label="Buka menu sidebar">&#9776;</button>
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header"><i class="fas fa-book-open"></i> StoryApp</div>
+    <ul>
+      <li><a href="#/home"><i class="fas fa-home"></i> Beranda</a></li>
+      <li><a href="#/tambah"><i class="fas fa-plus"></i> Tambah Cerita</a></li>
+      <li><a href="#/saved"><i class="fas fa-bookmark"></i> Tersimpan</a></li>
+      <li><a href="#/about"><i class="fas fa-info-circle"></i> Tentang</a></li>
+      <li id="menu-login-sidebar"><a href="#/login"><i class="fas fa-sign-in-alt"></i> Login</a></li>
+      <li id="menu-register-sidebar"><a href="#/register"><i class="fas fa-user-plus"></i> Register</a></li>
+      <li id="menu-logout-sidebar" style="display:none;"><a href="#" id="logout-link-sidebar"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </nav>
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarOverlay = document.querySelector('.sidebar-overlay');
+    function openSidebar() {
+      sidebar.classList.add('open');
+      document.body.classList.add('sidebar-open');
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      document.body.classList.remove('sidebar-open');
+    }
+    sidebarToggle.addEventListener('click', openSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    sidebar.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeSidebar);
+    });
+    // Login/logout logic
+    function updateSidebarAuth() {
+      const isLoggedIn = !!localStorage.getItem('token');
+      document.getElementById('menu-login-sidebar').style.display = isLoggedIn ? 'none' : 'block';
+      document.getElementById('menu-register-sidebar').style.display = isLoggedIn ? 'none' : 'block';
+      document.getElementById('menu-logout-sidebar').style.display = isLoggedIn ? 'block' : 'none';
+    }
+    document.getElementById('logout-link-sidebar').addEventListener('click', function(e) {
+      e.preventDefault();
+      localStorage.removeItem('token');
+      window.location.href = '#/login';
+      updateSidebarAuth();
+    });
+    window.addEventListener('hashchange', updateSidebarAuth);
+    document.addEventListener('DOMContentLoaded', updateSidebarAuth);
+  </script>
 </body>
 </html>
