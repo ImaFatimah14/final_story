@@ -616,8 +616,9 @@ header {
     position: absolute;
     top: 90px;
     left: 0;
-    width: 100%;
-    padding: 1rem;
+    width: 100vw;
+    min-width: 0;
+    padding: 1rem 0;
     z-index: 1000;
     transition: max-height 0.3s ease-in-out;
     max-height: 0;
@@ -626,6 +627,24 @@ header {
   .navigation-drawer.open {
     display: flex !important;
     max-height: 500px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0;
+  }
+  .nav-list li {
+    width: 100%;
+    margin: 0;
+  }
+  .nav-list li a {
+    width: 100%;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    display: block;
+    border-bottom: 1px solid #3a2a2a;
   }
 }
 
