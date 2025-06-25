@@ -236,12 +236,28 @@
     sidebar.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', closeSidebar);
     });
+    function attachSidebarMenuEvents() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.querySelectorAll('a').forEach(link => {
+        link.onclick = function(e) {
+          // Navigasi SPA: hashchange
+          const href = link.getAttribute('href');
+          if (href && href.startsWith('#')) {
+            window.location.hash = href;
+            e.preventDefault();
+          }
+          closeSidebar();
+        };
+      });
+    }
+
     // Login/logout logic
     function updateSidebarAuth() {
       const isLoggedIn = !!localStorage.getItem('token');
       document.getElementById('menu-login-sidebar').style.display = isLoggedIn ? 'none' : 'block';
       document.getElementById('menu-register-sidebar').style.display = isLoggedIn ? 'none' : 'block';
       document.getElementById('menu-logout-sidebar').style.display = isLoggedIn ? 'block' : 'none';
+      attachSidebarMenuEvents(); // Pasang ulang event handler setiap update auth
     }
     document.getElementById('logout-link-sidebar').addEventListener('click', function(e) {
       e.preventDefault();
@@ -250,7 +266,10 @@
       updateSidebarAuth();
     });
     window.addEventListener('hashchange', updateSidebarAuth);
-    document.addEventListener('DOMContentLoaded', updateSidebarAuth);
+    document.addEventListener('DOMContentLoaded', () => {
+      updateSidebarAuth();
+      attachSidebarMenuEvents();
+    });
   </script>
 </body>
 </html>
