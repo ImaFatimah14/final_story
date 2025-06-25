@@ -71,7 +71,15 @@ async function subscribeUser(token) {
     });
 
     isSubscribed = true;
-    alert('Berhasil subscribe notifikasi!');
+    // Tampilkan notifikasi browser lokal jika sudah granted
+    if (Notification.permission === 'granted') {
+      new Notification('Berhasil subscribe notifikasi!', {
+        body: 'Kamu akan menerima notifikasi cerita baru.',
+        icon: '/public/favicon.png'
+      });
+    } else {
+      alert('Berhasil subscribe notifikasi!');
+    }
     console.log('✅ Berhasil subscribe notifikasi.');
   } catch (err) {
     alert('Gagal subscribe notifikasi.');
