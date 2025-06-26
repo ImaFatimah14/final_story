@@ -8,9 +8,9 @@ class App {
   #navigationDrawer = null;
 
   constructor({ navigationDrawer, drawerButton, content }) {
+    this.#navigationDrawer = navigationDrawer;
     this.#content = content;
     this.#drawerButton = drawerButton;
-    this.#navigationDrawer = navigationDrawer;
 
     this._setupDrawer();
   }

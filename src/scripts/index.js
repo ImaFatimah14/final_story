@@ -8,8 +8,8 @@ import { updatePushButton, handlePushButtonClick } from './utils/push-notificati
 document.addEventListener('DOMContentLoaded', async () => {
   const app = new App({
     content: document.querySelector('#main-content'),
-    drawerButton: document.querySelector('#sidebarToggle'), // Perbaiki id tombol sidebar
-    navigationDrawer: document.querySelector('#navigation-drawer'),
+    drawerButton: document.querySelector('#sidebarToggleOpen'), // id tombol sidebar yang benar
+    navigationDrawer: document.querySelector('#sidebar'),
   });
 
   // Render halaman sesuai hash saat ini (agar beranda otomatis muncul setelah login)

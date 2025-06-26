@@ -109,7 +109,6 @@
       <a href="#/" class="brand-name" aria-label="Beranda StoryApp">
         <i class="fas fa-book-open" aria-hidden="true"></i> StoryApp
       </a>
-
       <nav id="navigation-drawer" class="navigation-drawer" aria-label="Primary navigation">
         <ul id="nav-list" class="nav-list">
           <li><a href="#/home"><i class="fas fa-home"></i> Beranda</a></li>
@@ -130,10 +129,8 @@
           </li>
         </ul>
       </nav>
-
-      <!-- Hapus drawer-button di kiri, pindahkan sidebar-toggle ke kanan -->
       <button
-        id="sidebarToggle"
+        id="sidebarToggleOpen"
         class="sidebar-toggle"
         aria-label="Buka menu sidebar"
         style="right: 1.5rem; left: auto; position: absolute; top: 1.2rem;"
@@ -161,31 +158,30 @@
     function isUserLoggedIn() {
       return !!localStorage.getItem('token');
     }
-
     function logout() {
       localStorage.removeItem('token');
       window.location.href = '#/login';
     }
-
     function updateSidebarMenu() {
       const isLoggedIn = isUserLoggedIn();
-      const hash = window.location.hash;
-      const navDrawer = document.getElementById('navigation-drawer');
-      // Selalu tampilkan menu jika sudah login
-      if (!isLoggedIn && (hash === '' || hash === '#/' || hash === '#/login' || hash === '#/register')) {
-        navDrawer.style.display = 'none';
-      } else {
-        navDrawer.style.display = '';
-      }
-      document.getElementById('menu-login').style.display = isLoggedIn ? 'none' : 'list-item';
-      document.getElementById('menu-register').style.display = isLoggedIn ? 'none' : 'list-item';
-      document.getElementById('menu-logout').style.display = isLoggedIn ? 'list-item' : 'none';
+      // Untuk navigation-drawer (desktop)
+      const loginMenu = document.getElementById('menu-login');
+      const registerMenu = document.getElementById('menu-register');
+      const logoutMenu = document.getElementById('menu-logout');
+      if (loginMenu) loginMenu.style.display = isLoggedIn ? 'none' : 'list-item';
+      if (registerMenu) registerMenu.style.display = isLoggedIn ? 'none' : 'list-item';
+      if (logoutMenu) logoutMenu.style.display = isLoggedIn ? 'list-item' : 'none';
+      // Untuk sidebar mobile
+      const loginMenuSidebar = document.getElementById('menu-login-sidebar');
+      const registerMenuSidebar = document.getElementById('menu-register-sidebar');
+      const logoutMenuSidebar = document.getElementById('menu-logout-sidebar');
+      if (loginMenuSidebar) loginMenuSidebar.style.display = isLoggedIn ? 'none' : 'list-item';
+      if (registerMenuSidebar) registerMenuSidebar.style.display = isLoggedIn ? 'none' : 'list-item';
+      if (logoutMenuSidebar) logoutMenuSidebar.style.display = isLoggedIn ? 'list-item' : 'none';
     }
-
     document.addEventListener('DOMContentLoaded', () => {
       updateSidebarMenu();
-
-      // Tambahkan event listener ke tombol logout
+      // Event listener logout desktop
       const logoutLink = document.getElementById('logout-link');
       if (logoutLink) {
         logoutLink.addEventListener('click', function (e) {
@@ -193,64 +189,72 @@
           logout();
         });
       }
+      // Event listener logout mobile
+      const logoutLinkSidebar = document.getElementById('logout-link-sidebar');
+      if (logoutLinkSidebar) {
+        logoutLinkSidebar.addEventListener('click', function(e) {
+          e.preventDefault();
+          logout();
+        });
+      }
+      // Sidebar open/close logic
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggleOpen = document.getElementById('sidebarToggleOpen');
+      const sidebarToggleClose = document.getElementById('sidebarToggleClose');
+      function openSidebar() {
+        if (sidebar) {
+          sidebar.classList.add('open');
+          document.body.classList.add('sidebar-open');
+        }
+      }
+      function closeSidebar() {
+        if (sidebar) {
+          sidebar.classList.remove('open');
+          document.body.classList.remove('sidebar-open');
+        }
+      }
+      if (sidebarToggleOpen) {
+        sidebarToggleOpen.addEventListener('click', function(e) {
+          e.preventDefault();
+          openSidebar();
+        });
+      }
+      if (sidebarToggleClose) {
+        sidebarToggleClose.addEventListener('click', function(e) {
+          e.preventDefault();
+          closeSidebar();
+        });
+      }
+      // Close sidebar when clicking outside (overlay)
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
     });
-
     window.addEventListener('hashchange', updateSidebarMenu);
     document.addEventListener('visibilitychange', updateSidebarMenu);
   </script>
 
   <!-- Sidebar Overlay & Toggle -->
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
-  <!-- <button class="sidebar-toggle" id="sidebarToggle" aria-label="Buka menu sidebar">
-    <i class="fas fa-bars"></i>
-  </button> -->
   <!-- Sidebar -->
   <nav class="sidebar" id="sidebar" aria-label="Menu utama">
     <div class="sidebar-header" style="background:#7c5b5b;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;">
       <span style="display:flex;align-items:center;gap:0.5rem;">
         <i class="fas fa-book-open"></i> <span style="font-weight:bold;font-size:1.3rem;">StoryApp</span>
       </span>
-      <button id="sidebarToggle" class="sidebar-toggle" aria-label="Tutup sidebar" style="background:none;border:2px dashed #fff;padding:0.3rem 0.5rem;border-radius:4px;display:flex;align-items:center;justify-content:center;">
+      <button id="sidebarToggleClose" class="sidebar-toggle" aria-label="Tutup sidebar" style="background:none;border:2px dashed #fff;padding:0.3rem 0.5rem;border-radius:4px;display:flex;align-items:center;justify-content:center;">
         <i class="fas fa-bars"></i>
       </button>
     </div>
-    <ul class="sidebar-menu" style="background:#232323;padding:1.5rem 0 1.5rem 0;margin:0;list-style:none;">
+    <ul class="sidebar-menu" id="sidebar-menu" style="background:#232323;padding:1.5rem 0 1.5rem 0;margin:0;list-style:none;">
       <li style="margin-bottom:1.2rem;"><a href="#/home" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-home"></i> Beranda</a></li>
       <li style="margin-bottom:1.2rem;"><a href="#/tambah" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-plus"></i> Tambah Cerita</a></li>
       <li style="margin-bottom:1.2rem;"><a href="#/saved" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-bookmark"></i> Tersimpan</a></li>
       <li style="margin-bottom:1.2rem;"><a href="#/about" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-info-circle"></i> Tentang</a></li>
       <li id="menu-logout-sidebar" style="margin-bottom:1.2rem;"><a href="#" id="logout-link-sidebar" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+      <li><button id="pushNotifBtn" class="subscribe" title="Langganan notifikasi" style="width:100%;background:#7c5b5b;color:#fff;border:none;padding:0.7rem 1rem;border-radius:6px;display:flex;align-items:center;gap:0.7rem;font-size:1.1rem;cursor:pointer;"><i class="fas fa-bell"></i> Subscribe</button></li>
     </ul>
   </nav>
-  <script>
-    // Sidebar open/close logic
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    function openSidebar() {
-      sidebar.classList.add('open');
-      document.body.classList.add('sidebar-open');
-    }
-    function closeSidebar() {
-      sidebar.classList.remove('open');
-      document.body.classList.remove('sidebar-open');
-    }
-    sidebarToggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      if (sidebar.classList.contains('open')) {
-        closeSidebar();
-      } else {
-        openSidebar();
-      }
-    });
-    // Close sidebar when clicking outside (overlay)
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    // Logout logic
-    document.getElementById('logout-link-sidebar').addEventListener('click', function(e) {
-      e.preventDefault();
-      localStorage.removeItem('token');
-      window.location.href = '#/login';
-    });
-  </script>
 </body>
 </html>
